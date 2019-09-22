@@ -1,5 +1,7 @@
-# node modules 
-\node_modules
+# Commonly ignored Node.js files
+node_modules/
+npm-debug.log
+.npm/
 
 # Enviroment files
 *.env
