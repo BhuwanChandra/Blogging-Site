@@ -26,6 +26,6 @@ var blogSchema = new mongoose.Schema({
 });
 
 
-// exporting user schema
+// exporting blog schema
 module.exports = mongoose.model("Blog", blogSchema);
 
