@@ -17,6 +17,8 @@ var commentRoutes = require("./routes/comments"),
 
 mongoose.connect("mongodb://localhost/blogSite", { useNewUrlParser: true });
 
+
+
 // tell express to use body-parser
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -28,7 +30,6 @@ app.use(methodOverride("_method"));
 
 app.use(flash());
 
-// PASSPORT CONFIGURATION
 // using express-session to create sessions
 app.use(require("express-session")({
     secret: "This is Blogging site",
@@ -55,7 +56,7 @@ app.use("/",indexRoutes);
 app.use("/blogs/:id/comments", commentRoutes);
 app.use('/blogs',blogRoutes);
 
-app.listen(1234,function(){
-    console.log("The BlogSite Server Has Started on the port 1234 !!");
+app.listen(7000,function(){
+    console.log("The BlogSite Server Has Started on the port 7000 !!");
 });
 
