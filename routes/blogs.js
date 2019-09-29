@@ -49,7 +49,47 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
     res.render("blogs/new");
 });
 
+// SHOW - show information of a particular Blog
+router.get("/:id", function (req, res) {
+    // find the Blog with provided id
+    Blog.findById(req.params.id).populate("comments").exec(function (err, foundBlog) {
+        if (err) {
+            console.log(err);
+        } else {
+            // render show template related to that id
+            res.render("blogs/show", { blog: foundBlog });
+        }
+    });
+});
 
+// EDIT BLOG ROUTE
+router.get("/:id/edit", middleware.checkBlogAuthor, function (req, res) {
+    Blog.findById(req.params.id, function (err, foundBlog) {
+        res.render("blogs/edit", { blog: foundBlog });
+    })
+})
+// UPDATE BLOG ROUTE
+router.put("/:id", middleware.checkBlogAuthor, function (req, res) {
+    // find and update the correct blog
+    Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, updatedBlog) {
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            // redirect somewhere(show page)
+            res.redirect("/blogs/" + req.params.id)
+        }
+    })
+})
 
+// DESTROY BLOG ROUTE
+router.delete("/:id", middleware.checkBlogAuthor, function (req, res) {
+    Blog.findByIdAndDelete(req.params.id, function (err) {
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs");
+        }
+    })
+})
 
 module.exports = router;
