@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
-var Blog = require("../models/blog");
-var middleware = require('../middleware');
+var Blog = require("../models/blogs");
+var middleware = require('../middlewares');
 
 // INDEX - display all blogs in DB
 router.get('/', function (req, res) {
