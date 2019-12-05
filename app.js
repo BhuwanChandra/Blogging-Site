@@ -6,7 +6,7 @@ var flash = require('connect-flash');
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var methodOverride = require("method-override");
-var Blog = require("./models/blog");
+var Blog = require("./models/blogs");
 var Comment = require("./models/comment");
 var User = require("./models/user");
 

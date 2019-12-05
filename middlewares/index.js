@@ -1,4 +1,4 @@
-var Blog = require('../models/blog');
+var Blog = require('../models/blogs');
 var Comment = require('../models/comment');
 
 // All the middlewares are goes here
