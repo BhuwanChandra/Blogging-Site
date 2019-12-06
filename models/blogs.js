@@ -3,9 +3,9 @@ var mongoose = require("mongoose");
 
 // Schema Setup
 var blogSchema = new mongoose.Schema({
-    name: String,
+    title: String,
     image: String,
-    body: String,
+    description: String,
     created: {
         type: Date,
         default: Date.now
