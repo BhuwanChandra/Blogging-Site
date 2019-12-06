@@ -21,13 +21,17 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 // comments create
 router.post("/", middleware.isLoggedIn, function (req, res) {
     // lookup blog using ID
+    var text = req.body.text;
+    var upComment = {
+      text: text
+    };
     Blog.findById(req.params.id, function (err, blog) {
         if (err) {
             console.log(err);
             res.redirect("/blogs");
         } else {
             // create new comment
-            Comment.create(req.body.comment, function (err, comment) {
+            Comment.create(upComment, function (err, comment) {
                 if (err) {
                     console.log(err);
                     req.flash('error', 'Something went wrong');
@@ -43,7 +47,8 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
                     blog.save();
                     req.flash('success', 'Successfully added comment!!!');
                     // redirect to blog show page
-                    res.redirect("/blogs/" + blog._id);
+                    // res.redirect("/blogs/" + blog._id);
+                    res.send({comment:comment,_id:blog._id});
                 }
             })
         }
