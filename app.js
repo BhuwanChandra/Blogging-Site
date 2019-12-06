@@ -15,7 +15,7 @@ var commentRoutes = require("./routes/comments"),
     blogRoutes = require('./routes/blogs'),
     indexRoutes = require('./routes/index');
 
-mongoose.connect("mongodb://localhost/blogSite", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/blogSite", { useNewUrlParser: true, useFindAndModify: false });
 
 
 
