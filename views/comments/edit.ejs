@@ -4,7 +4,7 @@
     <div class="jumbotron">
         <h1 style="text-align:center;">Edit Comment</h1>
         <div style="width:40%; margin:30px auto;">
-            <form action="/blogs/<%= blog_id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
+            <form action="/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=PUT" method="POST">
                 <div class="form-group">
                     <input class="form-control" type="text" name="comment[text]" value='<%= comment.text%>' required>
                 </div>
