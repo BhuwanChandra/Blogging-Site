@@ -1,4 +1,49 @@
 <% include ../partials/header %>
+<script>
+
+function enableEdit(id){
+    var comment = document.getElementById(id);
+    comment.disabled = false;
+    console.log(id);
+    
+    var btn = document.querySelectorAll("#btn"+id);
+    for (let i = 0; i < 2; i++) {
+        if (btn[i].textContent == "Edit")
+            btn[i].style.display = 'none';
+        else if (btn[i].textContent == "Save")
+            btn[i].style.display = 'block';
+    }
+}
+
+function editComment(url,id){
+    var input = document.getElementById(id);
+    console.log(id);
+    console.log(input);
+    
+    
+    input.disabled = true;
+    var value = input.value;
+
+    var data = {
+        text: value
+    };
+    console.log(data);
+
+    $.post(url, data, function (res, status) {
+        console.log(res);
+    });
+    
+    var btn = document.querySelectorAll("#btn" + id);
+    for(let i=0;i<2;i++){
+    if(btn[i].textContent == "Save")
+    btn[i].style.display = 'none';
+    else if (btn[i].textContent == "Edit")
+    btn[i].style.display = 'block';
+    }
+    
+}
+
+</script>
 
 <div class="container mb-5">
     <div class="row">
@@ -37,14 +82,27 @@
                     <div class="col-md-12">
                         <b><%= comment.author.username %></b>
                         <span class="float-right">10 days ago</span>
-                        <p>
+                        <!-- <p>
                             <%= comment.text %>
-                        </p>
+                        </p> -->
+
+                        <div class="form-group">
+                            <input class="form-control" onfocusout="editComment('/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=PUT','<%= comment._id %>')" id="<%= comment._id %>" type="text" name="comment[text]" value='<%= comment.text%>' required disabled>
+                        </div>
+
                         <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
-                        <a class="btn btn-sm btn-warning"
+                        <!-- <a class="btn btn-sm btn-warning"
                             href="/blogs/<%= blog._id %>/comments/<%= comment._id %>/edit">
                             Edit
-                        </a>
+                        </a> -->
+                        <button class="btn btn-sm btn-warning" id="<%= 'btn'+comment._id %>"
+                            onclick="enableEdit('<%= comment._id %>')">
+                            Edit
+                        </button>
+                        <button class="btn btn-sm btn-success" id="<%= 'btn'+comment._id %>" style="display:none" onclick="editComment('/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=PUT','<%= comment._id %>')">
+                            Save
+                        </button>
+
                         <form id="delete-form"
                             action="/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
                             <button class="btn btn-sm btn-danger">Delete</button>

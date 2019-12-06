@@ -63,11 +63,19 @@ router.get("/:comment_id/edit",middleware.checkCommentAuthor,function(req, res){
 
 // COMMENT UPDATE ROUTE
 router.put("/:comment_id", middleware.checkCommentAuthor,function(req, res){
-    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, updatedComment){
+    var text = req.body.text;
+    var upComment = {
+        text: text
+    };
+    Comment.findByIdAndUpdate(req.params.comment_id, upComment, function(err, updatedComment){
         if (err) {
             res.redirect('back');
         } else {
-            res.redirect("/blogs/"+ req.params.id);
+            // res.redirect("/blogs/"+ req.params.id);
+            res.send(updatedComment);
+            console.log(req.body.text);
+            console.log(req.params.comment_id);
+            
         }
     })
 })
