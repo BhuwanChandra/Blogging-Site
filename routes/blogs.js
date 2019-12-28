@@ -1,7 +1,10 @@
 var express = require("express");
 var router = express.Router();
 var Blog = require("../models/blogs");
+var expressSanitizer = require('express-sanitizer');
 var middleware = require('../middlewares');
+
+router.use(expressSanitizer());
 
 // INDEX - display all blogs in DB
 router.get('/', function (req, res) {
@@ -23,7 +26,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
     // get data from form and add to blogs array
     var title = req.body.title;
     var image = req.body.image;
-    var desc = req.body.description;
+    var desc = req.sanitize(req.body.description);
     var author = {
         id: req.user._id,
         username: req.user.username
@@ -71,6 +74,7 @@ router.get("/:id/edit", middleware.checkBlogAuthor, function (req, res) {
 // UPDATE BLOG ROUTE
 router.put("/:id", middleware.checkBlogAuthor, function (req, res) {
     // find and update the correct blog
+    req.body.blog.description = req.sanitize(req.body.blog.description);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, updatedBlog) {
         if (err) {
             res.redirect("/blogs");
