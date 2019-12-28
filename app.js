@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var expressSanitizer = require("express-sanitizer");
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var flash = require('connect-flash');
@@ -24,7 +25,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine","ejs");
 
+app.use(express.json());
+
 app.use(express.static(__dirname + "/public"));
+
+app.use(expressSanitizer());
 
 app.use(methodOverride("_method"));
 
