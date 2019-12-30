@@ -80,7 +80,7 @@ function editComment(url,id){
                 <h2 class="m-3"><%= blog.title %></h2>
                 <img class="img-responsive mt-1" src="<%= blog.image %>" alt="">
                 <div class="caption-full m-3">
-                    <p><%= blog.description%></p>
+                    <p><%- blog.description%></p>
                     <p>
                         <em class="float-right mb-3 mr-3"><strong>- By <%= blog.author.username %></strong><br><%= blog.created.toDateString() %></em>
                     </p><br><br>
