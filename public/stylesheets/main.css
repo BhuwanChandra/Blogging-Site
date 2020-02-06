@@ -21,3 +21,7 @@
 .blog-intro{
     color: #333333;
 }
+
+footer a:hover{
+    color: #b5bfc9 !important;
+}
