@@ -58,10 +58,12 @@ app.use(function(req, res, next){
 })
 
 app.use("/",indexRoutes);
-app.use("/blogs/:id/comments", commentRoutes);
+app.use("/blogs/:uid/:id/comments", commentRoutes);
 app.use('/blogs',blogRoutes);
 
 app.listen(7000,function(){
-    console.log("The BlogSite Server Has Started on the port 7000 !!");
+    console.log(
+      "The BlogSite Server Has Started on the port 7000 !!\nGo to the URL \t http://localhost:7000/blogs "
+    );
 });
 
