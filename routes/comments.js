@@ -94,7 +94,8 @@ router.delete("/:comment_id", middleware.checkCommentAuthor,function(req, res){
         } else {
             req.flash('success', 'Comment is deleted!!!');
             // redirect to show page
-            res.redirect("/blogs/" + req.params.id);
+            console.log(req.params.id);
+            res.redirect("/blogs/"+ req.params.uid + "/" + req.params.id);
         }
     })
 })
