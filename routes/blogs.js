@@ -53,22 +53,40 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
 });
 
 // SHOW - show information of a particular Blog
-router.get("/:id", function (req, res) {
+router.get("/:uid/:id", function (req, res) {
     // find the Blog with provided id
+    var blogAuthorId = req.params.uid;
+    var UserBlogs = {};
+    Blog.find({ "author.id": blogAuthorId }, function(
+      err,
+      foundBlogs
+    ) {
+      if (err) {
+        console.log(err);
+      } else {
+        UserBlogs = foundBlogs;
+      }
+    });
     Blog.findById(req.params.id).populate("comments").exec(function (err, foundBlog) {
         if (err) {
             console.log(err);
         } else {
             // render show template related to that id
-            res.render("blogs/show", { blog: foundBlog });
+            res.render("blogs/show", { blog: foundBlog, UserBlogs: UserBlogs });
         }
     });
 });
 
 // EDIT BLOG ROUTE
 router.get("/:id/edit", middleware.checkBlogAuthor, function (req, res) {
+    console.log(req.params.id);
+    
     Blog.findById(req.params.id, function (err, foundBlog) {
-        res.render("blogs/edit", { blog: foundBlog });
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("blogs/edit", { blog: foundBlog });
+        }
     })
 })
 // UPDATE BLOG ROUTE
