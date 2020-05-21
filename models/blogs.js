@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
 
 // Schema Setup
-var blogSchema = new mongoose.Schema({
+const blogSchema = new mongoose.Schema({
     title: String,
     image: String,
     description: String,

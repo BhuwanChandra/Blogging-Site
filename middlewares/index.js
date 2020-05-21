@@ -1,16 +1,18 @@
-var Blog = require('../models/blogs');
-var Comment = require('../models/comment');
+const Blog = require('../models/blogs');
+const Comment = require('../models/comment');
 
 // All the middlewares are goes here
-var middlewareObj = {};
+let middlewareObj = {};
 
 middlewareObj.checkBlogAuthor = function (req, res, next) {
+    // console.log(req.params);
     // check is user logged in ?
     if (req.isAuthenticated()) {
         Blog.findById(req.params.id, function (err, foundBlog) {
+            // console.log(foundBlog);
             if (err) {
                 req.flash('error', 'Blog not found');
-                res.redirect("/blogs");
+                res.redirect("/");
             } else {
                 //does user own the Blog
                 if (foundBlog.author.id.equals(req.user._id)) {

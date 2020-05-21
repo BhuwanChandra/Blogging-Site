@@ -1,29 +1,34 @@
-var express = require("express");
-var app = express();
-var expressSanitizer = require("express-sanitizer");
-var bodyParser = require("body-parser");
-var mongoose = require("mongoose");
-var flash = require('connect-flash');
-var passport = require("passport");
-var LocalStrategy = require("passport-local");
-var methodOverride = require("method-override");
-var Blog = require("./models/blogs");
-var Comment = require("./models/comment");
-var User = require("./models/user");
+const express = require("express");
+const app = express();
+const expressSanitizer = require("express-sanitizer");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const methodOverride = require("method-override");
+const Blog = require("./models/blogs");
+const Comment = require("./models/comment");
+const User = require("./models/user");
+
+const PORT = process.env.PORT || 7000;
+const { MONGO_URI } = require("./config/keys"); 
 
 // Requiring route files
-var commentRoutes = require("./routes/comments"),
-    blogRoutes = require('./routes/blogs'),
-    indexRoutes = require('./routes/index');
+const commentRoutes = require("./routes/comments"),
+  blogRoutes = require("./routes/blogs"),
+  indexRoutes = require("./routes/index");
 
-mongoose.connect("mongodb://localhost/blogSite", { useNewUrlParser: true, useFindAndModify: false });
-
-
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true
+}).catch(err => console.log(err));
 
 // tell express to use body-parser
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
 
 app.use(express.json());
 
@@ -36,11 +41,13 @@ app.use(methodOverride("_method"));
 app.use(flash());
 
 // using express-session to create sessions
-app.use(require("express-session")({
+app.use(
+  require("express-session")({
     secret: "This is Blogging site",
     resave: false,
     saveUninitialized: false
-}));
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -50,20 +57,23 @@ passport.deserializeUser(User.deserializeUser());
 
 // send the logged in user's info to every page that is -
 // - call the function below on every single route
-app.use(function(req, res, next){
-    res.locals.currentUser = req.user;
-    res.locals.error = req.flash('error');
-    res.locals.success = req.flash('success');
-    next();
-})
-
-app.use("/",indexRoutes);
-app.use("/blogs/:uid/:id/comments", commentRoutes);
-app.use('/blogs',blogRoutes);
-
-app.listen(7000,function(){
-    console.log(
-      "The BlogSite Server Has Started on the port 7000 !!\nGo to the URL \t http://localhost:7000/blogs "
-    );
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
+  next();
 });
 
+app.use("/", indexRoutes);
+app.use("/blogs/:uid/:id/comments", commentRoutes);
+app.use("/blogs", blogRoutes);
+
+app.get("*",(req, res) => {
+    res.render("error");
+});
+
+app.listen(PORT, function() {
+  console.log(
+    `The BlogSite Server Has Started on the port ${PORT} !!`
+  );
+});
