@@ -11,6 +11,23 @@
     padding: 10px;
 }
 
+.index-image {
+    min-height: 200px !important;
+}
+
+.side-image {
+    min-height: 150px !important;
+}
+
+.nav-item {
+    color: #f3f3f3 !important;
+}
+
+.nav-item:hover,
+.nav-item:focus {
+    color: #d6d6d6 !important;
+}
+
 #delete-form{
     display:inline;
 }
@@ -20,6 +37,12 @@
 
 .blog-intro{
     color: #333333;
+}
+
+.read-more {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1rem;
 }
 
 footer a:hover{

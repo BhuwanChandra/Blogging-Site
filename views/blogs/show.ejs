@@ -74,14 +74,18 @@ function editComment(url,id){
 <div class="container mb-5">
     <div class="row">
         <div class="col-md-3">
-            <p class="lead">Blogs by same author :</p>
+            <% if(UserBlogs && (UserBlogs.length > 1)){ %>
+                <p class="lead">
+                    <%= "Blogs by same author :" %>
+                </p>
+            <% } %>
             <div class="list-group">
                 <% if(UserBlogs){ for(let i = 0, c = 0; i < UserBlogs.length; i++){ %>
                    <% if((c < 3) && (UserBlogs[i]._id != blog.id)){ %>
                         <li class="p-0 pr-2" style="list-style: none;">
                             <div style="width: 100%; margin-bottom: 25px;">
                                 <div class="img-thumbnail">
-                                    <img src="<%= UserBlogs[i].image %>" alt="" />
+                                    <img src="<%= UserBlogs[i].image %>" class="side-image" alt="<%= UserBlogs[i].title %>" />
                                     <div class="caption mx-3 mt-2 text-dark">
                                         <h4><%= UserBlogs[i].title %></h4>
                                     </div>
@@ -132,7 +136,6 @@ function editComment(url,id){
                 <div class="m-2 row">
                     <div class="col-md-12">
                         <b><%= comment.author.username %></b>
-                        <span class="float-right">10 days ago</span>
                         <div class="form-group">
                             <input class="form-control" onfocusout="editComment('/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=PUT','<%= comment._id %>')" id="<%= comment._id %>" type="text" name="comment[text]" value='<%= comment.text%>' required disabled>
                         </div>
@@ -157,7 +160,7 @@ function editComment(url,id){
             </div>
         </div>
     </div>
-    <a href="/blogs">Go Back</a>
+    <a href="/">Go Back</a>
 </div>
 
 <% include ../partials/footer %>

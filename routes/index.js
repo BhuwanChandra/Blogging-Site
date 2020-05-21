@@ -1,13 +1,22 @@
-var express = require("express");
-var router = express.Router();
-var passport = require("passport");
-var User = require("../models/user");
-var middleware = require('../middlewares');
+const express = require("express");
+const router = express.Router();
+const passport = require("passport");
+const User = require("../models/user");
+const Blog = require("../models/blogs");
 
-router.get("/", function (req, res) {
-    res.redirect("/blogs");
+// INDEX - display all blogs in DB
+router.get('/', function (req, res) {
+    // Get all blogs from DB
+    Blog.find({}, function (err, blog) {
+        if (err) {
+            console.log(err);
+
+        } else {
+            res.render('blogs/index', { blogs: blog });
+
+        }
+    })
 });
-
 
 // AUTH ROUTES ====================
 
@@ -25,7 +34,7 @@ router.post("/register", function (req, res) {
         }
         passport.authenticate("local")(req, res, function () {
             req.flash('success', 'Welcome to Blogger.tech platform ' + user.username);
-            res.redirect("/blogs");
+            res.redirect("/");
         })
     })
 })
@@ -36,7 +45,7 @@ router.get("/login", function (req, res) {
 })
 // handle login logic  //  we use middleware to login
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/blogs",
+    successRedirect: "/",
     failureRedirect: "/login"
 }), function (req, res) {
 })
@@ -45,7 +54,7 @@ router.post("/login", passport.authenticate("local", {
 router.get("/logout", function (req, res) {
     req.logout();
     req.flash('success', "Successfully Logged You Out!!!")
-    res.redirect("/blogs");
+    res.redirect("/");
 })
 
 module.exports = router;

@@ -1,8 +1,8 @@
-var express = require("express");
-var router = express.Router({mergeParams: true});
-var Blog = require("../models/blogs");
-var Comment = require("../models/comment");
-var middleware = require("../middlewares");
+const express = require("express");
+const router = express.Router({mergeParams: true});
+const Blog = require("../models/blogs");
+const Comment = require("../models/comment");
+const middleware = require("../middlewares");
 
 // comments new
 router.get("/new", middleware.isLoggedIn, function (req, res) {
@@ -78,8 +78,8 @@ router.put("/:comment_id", middleware.checkCommentAuthor,function(req, res){
         } else {
             // res.redirect("/blogs/"+ req.params.id);
             res.send(updatedComment);
-            console.log(req.body.text);
-            console.log(req.params.comment_id);
+            // console.log(req.body.text);
+            // console.log(req.params.comment_id);
             
         }
     })
@@ -94,7 +94,7 @@ router.delete("/:comment_id", middleware.checkCommentAuthor,function(req, res){
         } else {
             req.flash('success', 'Comment is deleted!!!');
             // redirect to show page
-            console.log(req.params.id);
+            // console.log(req.params.id);
             res.redirect("/blogs/"+ req.params.uid + "/" + req.params.id);
         }
     })

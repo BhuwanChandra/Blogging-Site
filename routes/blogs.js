@@ -1,24 +1,10 @@
-var express = require("express");
-var router = express.Router();
-var Blog = require("../models/blogs");
-var expressSanitizer = require('express-sanitizer');
-var middleware = require('../middlewares');
+const express = require("express");
+const router = express.Router();
+const Blog = require("../models/blogs");
+const expressSanitizer = require('express-sanitizer');
+const middleware = require('../middlewares');
 
 router.use(expressSanitizer());
-
-// INDEX - display all blogs in DB
-router.get('/', function (req, res) {
-    // Get all blogs from DB
-    Blog.find({}, function (err, blog) {
-        if (err) {
-            console.log(err);
-
-        } else {
-            res.render('blogs/index', { blogs: blog });
-
-        }
-    })
-});
 
 // CREATE - add new Blog to DB
 router.post("/", middleware.isLoggedIn, function (req, res) {
@@ -41,7 +27,7 @@ router.post("/", middleware.isLoggedIn, function (req, res) {
 
         } else {
             // redirect back to blogs page
-            res.redirect("/blogs");
+            res.redirect("/");
         }
     })
 
@@ -52,8 +38,23 @@ router.get("/new", middleware.isLoggedIn, function (req, res) {
     res.render("blogs/new");
 });
 
+// EDIT BLOG ROUTE
+router.get("/:id/edit", middleware.checkBlogAuthor,(req, res) => {
+    // console.log(req.params);
+    
+    Blog.findById(req.params.id, function (err, foundBlog) {
+        if (err) {
+            console.log(err);
+            res.render("error");
+        } else {
+            res.render("blogs/edit", { blog: foundBlog });
+        }
+    })
+})
+
 // SHOW - show information of a particular Blog
 router.get("/:uid/:id", function (req, res) {
+    // console.log(req.params)
     // find the Blog with provided id
     var blogAuthorId = req.params.uid;
     var UserBlogs = {};
@@ -77,39 +78,28 @@ router.get("/:uid/:id", function (req, res) {
     });
 });
 
-// EDIT BLOG ROUTE
-router.get("/:id/edit", middleware.checkBlogAuthor, function (req, res) {
-    console.log(req.params.id);
-    
-    Blog.findById(req.params.id, function (err, foundBlog) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.render("blogs/edit", { blog: foundBlog });
-        }
-    })
-})
 // UPDATE BLOG ROUTE
 router.put("/:id", middleware.checkBlogAuthor, function (req, res) {
+    // console.log(req.params)
     // find and update the correct blog
     req.body.blog.description = req.sanitize(req.body.blog.description);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function (err, updatedBlog) {
         if (err) {
-            res.redirect("/blogs");
+            res.redirect("/");
         } else {
             // redirect somewhere(show page)
-            res.redirect("/blogs/" + req.params.id)
+            res.redirect("/blogs/"+ req.user._id + "/" + req.params.id)
         }
     })
 })
 
-// DESTROY BLOG ROUTE
+// DELETE BLOG ROUTE
 router.delete("/:id", middleware.checkBlogAuthor, function (req, res) {
     Blog.findByIdAndDelete(req.params.id, function (err) {
         if (err) {
-            res.redirect("/blogs");
+            res.redirect("/");
         } else {
-            res.redirect("/blogs");
+            res.redirect("/");
         }
     })
 })
